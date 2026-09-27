@@ -396,3 +396,5 @@ header.hero{max-width:100% !important}
 html[dir=rtl] .m-group{font-family:var(--fa);letter-spacing:0;font-size:12px}
 .m-end{font-size:12px;color:var(--mute);text-align:center;padding:10px 0 0}
 .m-nav button:disabled{opacity:.3;pointer-events:none}
+
+.m-hint.end::after{content:""}

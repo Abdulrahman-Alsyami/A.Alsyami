@@ -10,6 +10,7 @@ const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const lerp = (a, b, t) => a + (b - a) * t;
 const wait = ms => new Promise(r => setTimeout(r, ms));
 gsap.registerPlugin(ScrollTrigger);
+if (TOUCH) document.documentElement.classList.add('touch');
 // iOS shows/hides its toolbars while scrolling; do not re-measure every pin on those height changes
 ScrollTrigger.config({ ignoreMobileResize: true });
 
@@ -368,8 +369,8 @@ const ICONS = {
 };
 const STEPS = ['think', 'build', 'ship'];
 const CAPS = {
-  en: [['Welcome to my portfolio', 'Scroll to see how I work: think, build, ship'], ['Think', 'Analyse the problem before writing any code'], ['Build', 'The simplest solution that holds up in real use'], ['Ship', 'Launch to real users, then measure and improve']],
-  ar: [['مرحباً بك في ملفي الشخصي', 'مرّر للأسفل لتتعرّف على منهجيتي: أفكّر، أبني، أُطلق'], ['أفكّر', 'أحلّل المشكلة قبل كتابة أي سطر برمجي'], ['أبني', 'أبسط حل يصمد أمام الاستخدام الفعلي'], ['أُطلق', 'إطلاق لمستخدمين فعليين، ثم قياس وتحسين مستمر']],
+  en: [['Welcome to my portfolio', 'I build systems that make life easier, with a technical and commercial mindset'], ['Think', 'Analyse the problem before writing any code'], ['Build', 'Simple systems that serve users and the business goal'], ['Ship', 'Launch to real users, then measure and improve']],
+  ar: [['مرحباً بك في ملفي الشخصي', 'أبني أنظمة تسهّل حياة الناس، بعقلية تقنية وتجارية'], ['أفكّر', 'أحلّل المشكلة قبل كتابة أي سطر برمجي'], ['أبني', 'أنظمة بسيطة تخدم المستخدم وتحقق هدف النشاط'], ['أُطلق', 'إطلاق لمستخدمين فعليين، ثم قياس وتحسين مستمر']],
 };
 let wordIdx = -1, stageST = null;
 const STAGES = STEPS.length + 1;
@@ -408,8 +409,33 @@ function setupStages() {
 function updateStage() {
   if (REDUCED) { showWord(0); return; }
   const d = pinDistance(); if (!d) return;
-  const p = clamp(scrollY / d, 0, 1);
-  showWord(Math.min(STAGES - 1, Math.floor(p * STAGES * 0.999)));
+  // stage k covers [(k-1)*step + step/2 .. k*step + step/2): half a step of scroll is enough to move on
+  const step = d / (STAGES - 1), k = Math.floor((scrollY + step / 2) / step);
+  showWord(clamp(k, 0, STAGES - 1));
+}
+/* Touch: inside the hero one swipe moves exactly one stage (native momentum skipped stages on iPhone).
+   Outside the hero the page scrolls natively. */
+function initHeroSwipe() {
+  if (!TOUCH || REDUCED) return;
+  let y0 = null, busy = false;
+  const step = () => pinDistance() / (STAGES - 1);
+  const heroEnd = () => $('#heroTrack').getBoundingClientRect().bottom + scrollY;
+  const inHero = () => !document.body.classList.contains('locked') && scrollY < heroEnd() - 2;
+  const go = dir => {
+    if (busy) return;
+    // between the last stage and the next section, going up returns to the last stage first
+    const k = scrollY > pinDistance() + 4 && dir < 0 ? STAGES - 1 : wordIdx + dir; if (k < 0) return;
+    busy = true; setTimeout(() => busy = false, 750);
+    const top = k >= STAGES ? heroEnd() : Math.round(k * step());
+    window.scrollTo({ top, behavior: 'smooth' });
+  };
+  addEventListener('touchstart', e => { y0 = inHero() ? e.touches[0].clientY : null; }, { passive: true });
+  addEventListener('touchmove', e => { if (y0 !== null && inHero()) e.preventDefault(); }, { passive: false });
+  addEventListener('touchend', e => {
+    if (y0 === null) return;
+    const dy = y0 - e.changedTouches[0].clientY; y0 = null;
+    if (Math.abs(dy) > 28) go(dy > 0 ? 1 : -1);
+  }, { passive: true });
 }
 addEventListener('resize', () => { if (pinW !== innerWidth) { pinPx = 0; setupStages(); ScrollTrigger.refresh(); } });
 /* ---------- language ---------- */
@@ -526,13 +552,24 @@ function openProject(id) {
   $('#modal').classList.add('open'); lockScroll();
   $('#modal .close').focus({ preventScroll: true });
 }
-function closeModal() { $('#modal').classList.remove('open'); unlockScroll(); }
+function closeModal(next) {
+  $('#modal').classList.remove('open'); unlockScroll();
+  // land where the visitor is, not where they started: the card now on screen, or the next section after the last project
+  const p = PROJECTS[mIdx], card = document.querySelector(`[data-id="${p && p.id}"]`);
+  const target = typeof next === 'string' ? document.querySelector(next) : card;
+  if (target) requestAnimationFrame(() => scrollToEl(target, typeof next === 'string' ? -10 : -90));
+}
+function scrollToEl(el, off) {
+  const y = el.getBoundingClientRect().top + scrollY + off;
+  if (lenis) lenis.scrollTo(y, { duration: 1 }); else window.scrollTo({ top: y, behavior: REDUCED ? 'auto' : 'smooth' });
+}
 let mLock = false;
 const groupOf = p => PROJECTS.filter(q => q.feat === p.feat);
 function stepModal(d) {
   if (mLock) return;
   const g = groupOf(PROJECTS[mIdx]), k = g.indexOf(PROJECTS[mIdx]) + d;
-  if (k < 0 || k >= g.length) { gsap.fromTo('.panel', { y: 0 }, { y: -10 * d, duration: .12, yoyo: true, repeat: 1, ease: 'power2.out' }); return; }
+  if (k >= g.length) { closeModal(PROJECTS[mIdx].feat ? '#clients' : '#exp'); return; }
+  if (k < 0) { gsap.fromTo('.panel', { y: 0 }, { y: 10, duration: .12, yoyo: true, repeat: 1, ease: 'power2.out' }); return; }
   mLock = true; mIdx = PROJECTS.indexOf(g[k]); fillModal(d);
   setTimeout(() => mLock = false, 720);
 }
@@ -557,12 +594,15 @@ function fillModalNow() {
   const g = groupOf(p), k = g.indexOf(p) + 1;
   $('#mCount').innerHTML = `<span class="m-group">${p.feat ? (LANG === 'ar' ? 'مشاريعي' : 'My ventures') : (LANG === 'ar' ? 'أعمال للعملاء' : 'Client work')}</span> ${String(k).padStart(2, '0')} / ${String(g.length).padStart(2, '0')}`;
   $('.m-rail i').style.height = (k / g.length * 100) + '%';
-  $('#modal .up').disabled = k === 1; $('#modal .down').disabled = k === g.length;
+  $('#modal .up').disabled = k === 1; $('#modal .down').disabled = false;
+  const last = k === g.length, hint = $('#mHint');
+  hint.textContent = last ? (p.feat ? (LANG === 'ar' ? 'مرّر لعرض أعمال العملاء' : 'Scroll to see client work') : (LANG === 'ar' ? 'مرّر لمتابعة الصفحة' : 'Scroll to continue')) : (LANG === 'ar' ? 'مرّر للمشروع التالي' : 'Scroll for the next project');
+  $('#modal .down').setAttribute('aria-label', last ? 'Close and continue' : 'Next project');
   $('.m-body').scrollTop = 0; $('.panel').scrollTop = 0;
 }
 function initModal() {
-  $('#modal .back').addEventListener('click', closeModal);
-  $('#modal .close').addEventListener('click', closeModal);
+  $('#modal .back').addEventListener('click', () => closeModal());
+  $('#modal .close').addEventListener('click', () => closeModal());
   $('#modal .up').addEventListener('click', () => stepModal(-1));
   $('#modal .down').addEventListener('click', () => stepModal(1));
   // Vertical feed: wheel or swipe moves to the next or previous project once the inner text has nothing left to scroll
@@ -788,7 +828,7 @@ async function boot() {
   const loader = $('#loader');
   gsap.to(loader, { yPercent: -100, duration: .9, ease: 'expo.inOut', onComplete: () => loader.remove() });
   if (P) gsap.to(P.state, { introScatter: 0, duration: 2.4, ease: 'expo.out', delay: .25 });
-  wordIdx = 0; showCaption(0); setupStages();
+  wordIdx = 0; showCaption(0); setupStages(); initHeroSwipe();
   gsap.fromTo('.hero-in > *, .hero .pill, .scroll-hint', { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 1.1, stagger: .09, ease: 'expo.out', delay: .55 });
   setTimeout(() => ScrollTrigger.refresh(), 1200);
   addEventListener('load', () => ScrollTrigger.refresh());

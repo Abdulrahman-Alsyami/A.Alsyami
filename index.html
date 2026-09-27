@@ -413,6 +413,8 @@ html[dir=rtl] .m-group{font-family:var(--fa);letter-spacing:0;font-size:12px}
 .m-end{font-size:12px;color:var(--mute);text-align:center;padding:10px 0 0}
 .m-nav button:disabled{opacity:.3;pointer-events:none}
 
+.m-hint.end::after{content:""}
+
 </style>
 </head>
 <body>
@@ -425,7 +427,7 @@ html[dir=rtl] .m-group{font-family:var(--fa);letter-spacing:0;font-size:12px}
 <div class="cur"><span>OPEN</span></div><div class="cur-d"></div>
 
 <nav id="nav">
-  <a href="#hero" class="brand" aria-label="Home"><span class="mark">A</span><span class="bname"><b data-en="Abdulrahman Alsyami" data-ar="عبدالرحمن السيامي">Abdulrahman Alsyami</b><i data-en="Full-stack developer · Jeddah" data-ar="مطوّر ويب متكامل · جدة">Full-stack developer · Jeddah</i></span></a>
+  <a href="#hero" class="brand" aria-label="Home"><span class="mark">A</span><span class="bname"><b data-en="Abdulrahman Alsyami" data-ar="عبدالرحمن السيامي">Abdulrahman Alsyami</b><i data-en="Developer and entrepreneur · Jeddah" data-ar="مطوّر ورائد أعمال · جدة">Developer and entrepreneur · Jeddah</i></span></a>
   <div class="nlinks" id="navLinks">
     <span class="ind"></span>
     <a href="#about" data-en="About" data-ar="نبذة">About</a>
@@ -455,13 +457,6 @@ html[dir=rtl] .m-group{font-family:var(--fa);letter-spacing:0;font-size:12px}
   </header>
   </div>
 
-  <div class="marq" aria-hidden="true">
-    <div class="marq-track">
-      <span>Next.js</span><span>React</span><span>TypeScript</span><span>Supabase</span><span>Vercel</span><span>Python</span><span>SQL</span><span>WhatsApp Cloud API</span><span>Playwright</span><span>Firebase</span><span>Tailwind</span><span>Astro</span><span>Power Apps</span><span>AI-assisted development</span>
-      <span>Next.js</span><span>React</span><span>TypeScript</span><span>Supabase</span><span>Vercel</span><span>Python</span><span>SQL</span><span>WhatsApp Cloud API</span><span>Playwright</span><span>Firebase</span><span>Tailwind</span><span>Astro</span><span>Power Apps</span><span>AI-assisted development</span>
-    </div>
-  </div>
-
   <section id="about">
     <div class="wrap">
       <div class="sh">
@@ -476,7 +471,7 @@ html[dir=rtl] .m-group{font-family:var(--fa);letter-spacing:0;font-size:12px}
           <div class="badge"><i></i><span data-en="Jeddah, Saudi Arabia" data-ar="جدة، السعودية">Jeddah, Saudi Arabia</span></div>
         </div>
         <div class="about-txt">
-          <p class="reveal" data-html data-en="I am an Information Technology graduate from &lt;strong&gt;King Abdulaziz University&lt;/strong&gt; (GPA 4.74 / 5) and a full-stack developer working with &lt;strong&gt;Next.js, React, TypeScript, and Supabase&lt;/strong&gt;. My strength is the work before the code: breaking a problem down, weighing the trade-offs, and choosing the solution that holds up in real use." data-ar="خريج تقنية معلومات من &lt;strong&gt;جامعة الملك عبدالعزيز&lt;/strong&gt; بمعدل 4.74 من 5، ومطوّر ويب متكامل أعمل بـ &lt;strong&gt;Next.js وReact وTypeScript وSupabase&lt;/strong&gt;. تكمن قوتي فيما يسبق كتابة الكود: تحليل المشكلة، وموازنة الخيارات، واختيار الحل الذي يصمد أمام الاستخدام الفعلي.">I am an Information Technology graduate from <strong>King Abdulaziz University</strong> (GPA 4.74 / 5) and a full-stack developer working with <strong>Next.js, React, TypeScript, and Supabase</strong>. My strength is the work before the code: breaking a problem down, weighing the trade-offs, and choosing the solution that holds up in real use.</p>
+          <p class="reveal" data-html data-en="I am an Information Technology graduate from <strong>King Abdulaziz University</strong> (GPA 4.74 / 5), a full-stack developer, and an entrepreneur. I bring both sides to every project: the technical depth to build with <strong>Next.js, React, TypeScript, and Supabase</strong>, and the commercial sense to know what a business actually needs. My focus is building systems that make everyday tasks simpler for the people who use them." data-ar="خريج تقنية معلومات من <strong>جامعة الملك عبدالعزيز</strong> بمعدل 4.74 من 5، مطوّر ويب متكامل ورائد أعمال. أجمع في كل مشروع بين جانبين: العمق التقني للبناء بـ <strong>Next.js وReact وTypeScript وSupabase</strong>، والحسّ التجاري لفهم ما يحتاجه النشاط فعلاً. أركّز على بناء أنظمة تسهّل حياة الناس وتختصر عليهم مهامهم اليومية.">I am an Information Technology graduate from <strong>King Abdulaziz University</strong> (GPA 4.74 / 5), a full-stack developer, and an entrepreneur. I bring both sides to every project: the technical depth to build with <strong>Next.js, React, TypeScript, and Supabase</strong>, and the commercial sense to know what a business actually needs. My focus is building systems that make everyday tasks simpler for the people who use them.</strong> (GPA 4.74 / 5) and a full-stack developer working with <strong>Next.js, React, TypeScript, and Supabase</strong>. My strength is the work before the code: breaking a problem down, weighing the trade-offs, and choosing the solution that holds up in real use.</p>
           <p class="reveal" data-html data-en="I have founded and run several ventures and delivered &lt;strong&gt;platforms used by real customers&lt;/strong&gt;, including a digital invitations platform and an online store I have operated since 2022. My background also includes hospital IT support and leading public relations and events for seven organizations, with more than 1,000 documented volunteer hours." data-ar="أسّست وأدرت عدة مشاريع تجارية، وأطلقت &lt;strong&gt;منصّات يستخدمها عملاء فعليون&lt;/strong&gt;، منها منصّة للدعوات الرقمية ومتجر إلكتروني أديره منذ 2022. وتشمل خبرتي الدعم الفني في بيئة مستشفى، وقيادة العلاقات العامة والفعاليات في سبع جهات بأكثر من 1000 ساعة تطوّع موثّقة.">I have founded and run several ventures and delivered <strong>platforms used by real customers</strong>, including a digital invitations platform and an online store I have operated since 2022. My background also includes hospital IT support and leading public relations and events for seven organizations, with more than 1,000 documented volunteer hours.</p>
           <div class="stats">
             <div class="stat"><b data-n="4.74" data-dec="2">0</b><span data-en="GPA out of 5" data-ar="المعدل من 5">GPA out of 5</span></div>
@@ -618,7 +613,7 @@ html[dir=rtl] .m-group{font-family:var(--fa);letter-spacing:0;font-size:12px}
         <b data-en="Year" data-ar="السنة">Year</b><span id="mYear"></span>
         <b data-en="Stack" data-ar="التقنيات">Stack</b><div class="tags" id="mTags"></div>
       </div>
-      <div class="m-actions"><a class="btn pri sm" id="mVisit" target="_blank" rel="noopener"><span data-en="Visit live site" data-ar="زُر الموقع الحيّ">Visit live site</span><span class="arr">→</span></a><span class="m-hint" data-en="Scroll for the next project" data-ar="مرّر للمشروع التالي">Scroll for the next project</span></div>
+      <div class="m-actions"><a class="btn pri sm" id="mVisit" target="_blank" rel="noopener"><span data-en="Visit live site" data-ar="زُر الموقع الحيّ">Visit live site</span><span class="arr">→</span></a><span class="m-hint" id="mHint" data-en="Scroll for the next project" data-ar="مرّر للمشروع التالي">Scroll for the next project</span></div>
     </div>
   </div>
 </div>
@@ -640,6 +635,7 @@ const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const lerp = (a, b, t) => a + (b - a) * t;
 const wait = ms => new Promise(r => setTimeout(r, ms));
 gsap.registerPlugin(ScrollTrigger);
+if (TOUCH) document.documentElement.classList.add('touch');
 // iOS shows/hides its toolbars while scrolling; do not re-measure every pin on those height changes
 ScrollTrigger.config({ ignoreMobileResize: true });
 
@@ -998,8 +994,8 @@ const ICONS = {
 };
 const STEPS = ['think', 'build', 'ship'];
 const CAPS = {
-  en: [['Welcome to my portfolio', 'Scroll to see how I work: think, build, ship'], ['Think', 'Analyse the problem before writing any code'], ['Build', 'The simplest solution that holds up in real use'], ['Ship', 'Launch to real users, then measure and improve']],
-  ar: [['مرحباً بك في ملفي الشخصي', 'مرّر للأسفل لتتعرّف على منهجيتي: أفكّر، أبني، أُطلق'], ['أفكّر', 'أحلّل المشكلة قبل كتابة أي سطر برمجي'], ['أبني', 'أبسط حل يصمد أمام الاستخدام الفعلي'], ['أُطلق', 'إطلاق لمستخدمين فعليين، ثم قياس وتحسين مستمر']],
+  en: [['Welcome to my portfolio', 'I build systems that make life easier, with a technical and commercial mindset'], ['Think', 'Analyse the problem before writing any code'], ['Build', 'Simple systems that serve users and the business goal'], ['Ship', 'Launch to real users, then measure and improve']],
+  ar: [['مرحباً بك في ملفي الشخصي', 'أبني أنظمة تسهّل حياة الناس، بعقلية تقنية وتجارية'], ['أفكّر', 'أحلّل المشكلة قبل كتابة أي سطر برمجي'], ['أبني', 'أنظمة بسيطة تخدم المستخدم وتحقق هدف النشاط'], ['أُطلق', 'إطلاق لمستخدمين فعليين، ثم قياس وتحسين مستمر']],
 };
 let wordIdx = -1, stageST = null;
 const STAGES = STEPS.length + 1;
@@ -1038,8 +1034,33 @@ function setupStages() {
 function updateStage() {
   if (REDUCED) { showWord(0); return; }
   const d = pinDistance(); if (!d) return;
-  const p = clamp(scrollY / d, 0, 1);
-  showWord(Math.min(STAGES - 1, Math.floor(p * STAGES * 0.999)));
+  // stage k covers [(k-1)*step + step/2 .. k*step + step/2): half a step of scroll is enough to move on
+  const step = d / (STAGES - 1), k = Math.floor((scrollY + step / 2) / step);
+  showWord(clamp(k, 0, STAGES - 1));
+}
+/* Touch: inside the hero one swipe moves exactly one stage (native momentum skipped stages on iPhone).
+   Outside the hero the page scrolls natively. */
+function initHeroSwipe() {
+  if (!TOUCH || REDUCED) return;
+  let y0 = null, busy = false;
+  const step = () => pinDistance() / (STAGES - 1);
+  const heroEnd = () => $('#heroTrack').getBoundingClientRect().bottom + scrollY;
+  const inHero = () => !document.body.classList.contains('locked') && scrollY < heroEnd() - 2;
+  const go = dir => {
+    if (busy) return;
+    // between the last stage and the next section, going up returns to the last stage first
+    const k = scrollY > pinDistance() + 4 && dir < 0 ? STAGES - 1 : wordIdx + dir; if (k < 0) return;
+    busy = true; setTimeout(() => busy = false, 750);
+    const top = k >= STAGES ? heroEnd() : Math.round(k * step());
+    window.scrollTo({ top, behavior: 'smooth' });
+  };
+  addEventListener('touchstart', e => { y0 = inHero() ? e.touches[0].clientY : null; }, { passive: true });
+  addEventListener('touchmove', e => { if (y0 !== null && inHero()) e.preventDefault(); }, { passive: false });
+  addEventListener('touchend', e => {
+    if (y0 === null) return;
+    const dy = y0 - e.changedTouches[0].clientY; y0 = null;
+    if (Math.abs(dy) > 28) go(dy > 0 ? 1 : -1);
+  }, { passive: true });
 }
 addEventListener('resize', () => { if (pinW !== innerWidth) { pinPx = 0; setupStages(); ScrollTrigger.refresh(); } });
 /* ---------- language ---------- */
@@ -1156,13 +1177,24 @@ function openProject(id) {
   $('#modal').classList.add('open'); lockScroll();
   $('#modal .close').focus({ preventScroll: true });
 }
-function closeModal() { $('#modal').classList.remove('open'); unlockScroll(); }
+function closeModal(next) {
+  $('#modal').classList.remove('open'); unlockScroll();
+  // land where the visitor is, not where they started: the card now on screen, or the next section after the last project
+  const p = PROJECTS[mIdx], card = document.querySelector(`[data-id="${p && p.id}"]`);
+  const target = typeof next === 'string' ? document.querySelector(next) : card;
+  if (target) requestAnimationFrame(() => scrollToEl(target, typeof next === 'string' ? -10 : -90));
+}
+function scrollToEl(el, off) {
+  const y = el.getBoundingClientRect().top + scrollY + off;
+  if (lenis) lenis.scrollTo(y, { duration: 1 }); else window.scrollTo({ top: y, behavior: REDUCED ? 'auto' : 'smooth' });
+}
 let mLock = false;
 const groupOf = p => PROJECTS.filter(q => q.feat === p.feat);
 function stepModal(d) {
   if (mLock) return;
   const g = groupOf(PROJECTS[mIdx]), k = g.indexOf(PROJECTS[mIdx]) + d;
-  if (k < 0 || k >= g.length) { gsap.fromTo('.panel', { y: 0 }, { y: -10 * d, duration: .12, yoyo: true, repeat: 1, ease: 'power2.out' }); return; }
+  if (k >= g.length) { closeModal(PROJECTS[mIdx].feat ? '#clients' : '#exp'); return; }
+  if (k < 0) { gsap.fromTo('.panel', { y: 0 }, { y: 10, duration: .12, yoyo: true, repeat: 1, ease: 'power2.out' }); return; }
   mLock = true; mIdx = PROJECTS.indexOf(g[k]); fillModal(d);
   setTimeout(() => mLock = false, 720);
 }
@@ -1187,12 +1219,15 @@ function fillModalNow() {
   const g = groupOf(p), k = g.indexOf(p) + 1;
   $('#mCount').innerHTML = `<span class="m-group">${p.feat ? (LANG === 'ar' ? 'مشاريعي' : 'My ventures') : (LANG === 'ar' ? 'أعمال للعملاء' : 'Client work')}</span> ${String(k).padStart(2, '0')} / ${String(g.length).padStart(2, '0')}`;
   $('.m-rail i').style.height = (k / g.length * 100) + '%';
-  $('#modal .up').disabled = k === 1; $('#modal .down').disabled = k === g.length;
+  $('#modal .up').disabled = k === 1; $('#modal .down').disabled = false;
+  const last = k === g.length, hint = $('#mHint');
+  hint.textContent = last ? (p.feat ? (LANG === 'ar' ? 'مرّر لعرض أعمال العملاء' : 'Scroll to see client work') : (LANG === 'ar' ? 'مرّر لمتابعة الصفحة' : 'Scroll to continue')) : (LANG === 'ar' ? 'مرّر للمشروع التالي' : 'Scroll for the next project');
+  $('#modal .down').setAttribute('aria-label', last ? 'Close and continue' : 'Next project');
   $('.m-body').scrollTop = 0; $('.panel').scrollTop = 0;
 }
 function initModal() {
-  $('#modal .back').addEventListener('click', closeModal);
-  $('#modal .close').addEventListener('click', closeModal);
+  $('#modal .back').addEventListener('click', () => closeModal());
+  $('#modal .close').addEventListener('click', () => closeModal());
   $('#modal .up').addEventListener('click', () => stepModal(-1));
   $('#modal .down').addEventListener('click', () => stepModal(1));
   // Vertical feed: wheel or swipe moves to the next or previous project once the inner text has nothing left to scroll
@@ -1418,7 +1453,7 @@ async function boot() {
   const loader = $('#loader');
   gsap.to(loader, { yPercent: -100, duration: .9, ease: 'expo.inOut', onComplete: () => loader.remove() });
   if (P) gsap.to(P.state, { introScatter: 0, duration: 2.4, ease: 'expo.out', delay: .25 });
-  wordIdx = 0; showCaption(0); setupStages();
+  wordIdx = 0; showCaption(0); setupStages(); initHeroSwipe();
   gsap.fromTo('.hero-in > *, .hero .pill, .scroll-hint', { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 1.1, stagger: .09, ease: 'expo.out', delay: .55 });
   setTimeout(() => ScrollTrigger.refresh(), 1200);
   addEventListener('load', () => ScrollTrigger.refresh());
