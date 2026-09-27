@@ -394,16 +394,24 @@ function showWord(i) {
 }
 /* The hero stays pinned while the visitor scrolls through the four stages
    (name, think, build, ship); one screen of scroll per stage, then the page moves on. */
-function pinDistance() { return REDUCED ? 0 : innerHeight * (MOBILE ? 0.75 : 0.9) * (STAGES - 1); }
-function setupStages() {
-  stageST && stageST.kill(); stageST = null;
-  if (REDUCED) { showWord(0); return; }
-  stageST = ScrollTrigger.create({
-    trigger: '#hero', start: 'top top', end: () => '+=' + pinDistance(), pin: true, pinSpacing: true, anticipatePin: 1, invalidateOnRefresh: true,
-    onUpdate: self => showWord(Math.min(STAGES - 1, Math.floor(self.progress * STAGES * 0.999))),
-  });
-  ScrollTrigger.refresh();
+let pinPx = 0, pinW = 0;
+function pinDistance() {
+  if (REDUCED) return 0;
+  if (!pinPx || pinW !== innerWidth) { pinW = innerWidth; pinPx = Math.round(document.documentElement.clientHeight * (MOBILE ? 0.6 : 0.85) * (STAGES - 1)); }
+  return pinPx;
 }
+function setupStages() {
+  const track = $('#heroTrack');
+  if (track) track.style.setProperty('--pin', pinDistance() + 'px');
+  updateStage();
+}
+function updateStage() {
+  if (REDUCED) { showWord(0); return; }
+  const d = pinDistance(); if (!d) return;
+  const p = clamp(scrollY / d, 0, 1);
+  showWord(Math.min(STAGES - 1, Math.floor(p * STAGES * 0.999)));
+}
+addEventListener('resize', () => { if (pinW !== innerWidth) { pinPx = 0; setupStages(); ScrollTrigger.refresh(); } });
 /* ---------- language ---------- */
 function applyLang(first) {
   const t = T[LANG];
@@ -520,9 +528,12 @@ function openProject(id) {
 }
 function closeModal() { $('#modal').classList.remove('open'); unlockScroll(); }
 let mLock = false;
+const groupOf = p => PROJECTS.filter(q => q.feat === p.feat);
 function stepModal(d) {
-  if (mLock) return; mLock = true;
-  mIdx = (mIdx + d + PROJECTS.length) % PROJECTS.length; fillModal(d);
+  if (mLock) return;
+  const g = groupOf(PROJECTS[mIdx]), k = g.indexOf(PROJECTS[mIdx]) + d;
+  if (k < 0 || k >= g.length) { gsap.fromTo('.panel', { y: 0 }, { y: -10 * d, duration: .12, yoyo: true, repeat: 1, ease: 'power2.out' }); return; }
+  mLock = true; mIdx = PROJECTS.indexOf(g[k]); fillModal(d);
   setTimeout(() => mLock = false, 720);
 }
 function fillModal(dir = 0) {
@@ -543,8 +554,10 @@ function fillModalNow() {
   $('#mTags').innerHTML = p.tags.map(x => `<span>${x}</span>`).join('');
   $('#mYear').textContent = p.year; $('#mRole').textContent = LANG === 'ar' ? p.role_ar : p.role_en;
   const v = $('#mVisit'); if (p.url) { v.href = p.url; v.style.display = ''; v.querySelector('span').textContent = /instagram\.com/.test(p.url) ? visitLabel(p) : (LANG === 'ar' ? 'زُر الموقع الحيّ' : 'Visit live site'); } else v.style.display = 'none';
-  $('#mCount').textContent = `${String(mIdx + 1).padStart(2, '0')} / ${String(PROJECTS.length).padStart(2, '0')}`;
-  $('.m-rail i').style.height = ((mIdx + 1) / PROJECTS.length * 100) + '%';
+  const g = groupOf(p), k = g.indexOf(p) + 1;
+  $('#mCount').innerHTML = `<span class="m-group">${p.feat ? (LANG === 'ar' ? 'مشاريعي' : 'My ventures') : (LANG === 'ar' ? 'أعمال للعملاء' : 'Client work')}</span> ${String(k).padStart(2, '0')} / ${String(g.length).padStart(2, '0')}`;
+  $('.m-rail i').style.height = (k / g.length * 100) + '%';
+  $('#modal .up').disabled = k === 1; $('#modal .down').disabled = k === g.length;
   $('.m-body').scrollTop = 0; $('.panel').scrollTop = 0;
 }
 function initModal() {
@@ -566,7 +579,7 @@ function initModal() {
   let ty = 0;
   panel.addEventListener('touchstart', e => { ty = e.touches[0].clientY; }, { passive: true });
   panel.addEventListener('touchend', e => {
-    const dy = ty - e.changedTouches[0].clientY; if (Math.abs(dy) < 70) return;
+    const dy = ty - e.changedTouches[0].clientY; if (Math.abs(dy) < 120) return;
     const dir = dy > 0 ? 1 : -1;
     if (innerCanScroll(panel, dir) || innerCanScroll(e.target.closest('.m-media'), dir)) return;
     stepModal(dir);
@@ -594,9 +607,11 @@ function initScroll() {
   }
   $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => { const h = a.getAttribute('href') || ''; if (!h.startsWith('#')) return; e.preventDefault(); scrollToSel(h); }));
   const nav = $('#nav'), bar = $('#progress'), navLinks = $$('#navLinks a'), ind = $('#navLinks .ind');
-  const secs = ['about', 'work', 'exp', 'vol', 'contact'].map(id => $('#' + id));
+  const secs = ['about', 'work', 'clients', 'exp', 'vol', 'contact'].map(id => $('#' + id));
   const onScroll = () => {
     if (document.body.classList.contains('locked')) return;
+    updateStage();
+    clearTimeout(onScroll.rt); onScroll.rt = setTimeout(() => revealPass(), 120);
     nav.classList.toggle('scrolled', scrollY > 30);
     let cur = ''; secs.forEach(s => { if (s.getBoundingClientRect().top <= innerHeight * .45) cur = '#' + s.id; });
     if (scrollY + innerHeight >= document.documentElement.scrollHeight - 4) cur = '#contact';
@@ -646,7 +661,9 @@ function setupCamera() {
     }
   });
 }
+let revealPass = () => {};
 function setupReveals(reset) {
+  $$('[data-shown]').forEach(el => delete el.dataset.shown);
   io && io.disconnect();
   $$('.split').forEach(el => { splitEl(el); if (!REDUCED) gsap.set($$('i', el), { yPercent: 115, opacity: 0 }); });
   // Arabic letters join, so splitting them into separate spans breaks the word; wipe it in whole instead
@@ -655,7 +672,10 @@ function setupReveals(reset) {
   if (!REDUCED) gsap.set('.pr b, .ti, .org', { opacity: 0 });
   io = new IntersectionObserver(entries => entries.forEach(en => {
     if (!en.isIntersecting) return;
-    const el = en.target; io.unobserve(el);
+    revealEl(en.target);
+  }), { threshold: .2, rootMargin: '0px 0px -8% 0px' });
+  function revealEl(el) {
+    if (el.dataset.shown) return; el.dataset.shown = 1; io.unobserve(el);
     if (REDUCED) { el.classList.add('in'); if (el.classList.contains('stat')) countUp(el); return; }
     if (el.classList.contains('split')) landWords(el);
     else if (el.matches('.eyebrow, .sk h3')) { if (LANG === 'ar') gsap.to(el, { opacity: 1, x: 0, letterSpacing: '0em', duration: .8, ease: 'expo.out' }); else gsap.to($$('.ch', el), { opacity: 1, y: 0, duration: .35, stagger: .03, ease: 'power2.out' }); }
@@ -667,7 +687,8 @@ function setupReveals(reset) {
     else if (el.classList.contains('ti')) gsap.fromTo(el, { x: (LANG === 'ar' ? 1 : -1) * 60, opacity: 0 }, { x: 0, opacity: 1, duration: .8, ease: 'expo.out' });
     else if (el.classList.contains('org')) gsap.fromTo(el, { scale: .6, rotate: (Math.random() - .5) * 16, opacity: 0 }, { scale: 1, rotate: 0, opacity: 1, duration: .7, ease: 'back.out(2)' });
     el.classList.add('in');
-  }), { threshold: .2, rootMargin: '0px 0px -8% 0px' });
+  }
+  revealPass = () => $$('.split, .reveal, .stat, .eyebrow, .sk h3').forEach(el => { if (!el.dataset.shown && el.getBoundingClientRect().top < innerHeight) revealEl(el); });
   $$('.split, .reveal, .stat, .eyebrow, .sk h3').forEach(el => io.observe(el));
   setupCamera();
 }

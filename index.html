@@ -401,6 +401,18 @@ header.hero{max-width:100% !important}
 
 @media(max-width:860px){.m-media .frame{display:none}.m-nav{top:10px;inset-inline-end:10px}.m-nav button{width:38px;height:38px;background:rgba(4,7,15,.82)}}
 
+/* hero: native sticky pin, one screen of scroll per stage */
+.hero-track{position:relative;height:calc(100svh + var(--pin, 0px))}
+.hero-track>.hero{position:sticky;top:0;height:100svh;min-height:0}
+/* client work reads as its own band, clearly apart from my ventures */
+.band{background:linear-gradient(180deg,rgba(15,26,51,.55),rgba(7,12,26,.35));border-top:1px solid var(--line2);border-bottom:1px solid var(--line)}
+.band::before{content:"";position:absolute;top:-1px;left:50%;transform:translateX(-50%);width:min(240px,50%);height:2px;background:var(--grad)}
+#work{padding-bottom:clamp(90px,12vw,150px)}
+.m-group{font-family:var(--fd);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ice);border:1px solid var(--line2);border-radius:999px;padding:4px 10px}
+html[dir=rtl] .m-group{font-family:var(--fa);letter-spacing:0;font-size:12px}
+.m-end{font-size:12px;color:var(--mute);text-align:center;padding:10px 0 0}
+.m-nav button:disabled{opacity:.3;pointer-events:none}
+
 </style>
 </head>
 <body>
@@ -417,7 +429,8 @@ header.hero{max-width:100% !important}
   <div class="nlinks" id="navLinks">
     <span class="ind"></span>
     <a href="#about" data-en="About" data-ar="نبذة">About</a>
-    <a href="#work" data-en="Work" data-ar="الأعمال">Work</a>
+    <a href="#work" data-en="Ventures" data-ar="مشاريعي">Ventures</a>
+    <a href="#clients" data-en="Clients" data-ar="العملاء">Clients</a>
     <a href="#exp" data-en="Experience" data-ar="الخبرة">Experience</a>
     <a href="#vol" data-en="Volunteering" data-ar="التطوّع">Volunteering</a>
     <a href="#contact" data-en="Contact" data-ar="تواصل">Contact</a>
@@ -429,6 +442,7 @@ header.hero{max-width:100% !important}
 </nav>
 
 <main>
+  <div class="hero-track" id="heroTrack">
   <header class="hero" id="hero">
     <span class="pill"><i></i><span data-en="Open to opportunities · Jeddah" data-ar="متاح لفرص العمل · جدة">Open to opportunities · Jeddah</span></span>
     <h1 class="sr-only">Abdulrahman Alsyami</h1>
@@ -439,6 +453,7 @@ header.hero{max-width:100% !important}
     </div>
     <div class="scroll-hint"><span data-en="Scroll" data-ar="مرّر للأسفل">Scroll</span><i></i></div>
   </header>
+  </div>
 
   <div class="marq" aria-hidden="true">
     <div class="marq-track">
@@ -482,11 +497,19 @@ header.hero{max-width:100% !important}
   <section id="work">
     <div class="wrap">
       <div class="sh">
-        <div><div class="eyebrow" data-en="Selected work" data-ar="أعمال مختارة">Selected work</div><h2 class="fd split" data-en="Real products. Real users." data-ar="منتجات فعلية. مستخدمون حقيقيون.">Real products. Real users.</h2><p data-en="Open any project for details, then scroll to browse the rest." data-ar="افتح أي مشروع لعرض تفاصيله، ثم مرّر لاستعراض بقية المشاريع.">Open any project for details, then scroll to browse the rest.</p></div>
+        <div><div class="eyebrow" data-en="My ventures" data-ar="مشاريعي الخاصة">My ventures</div><h2 class="fd split" data-en="Businesses I founded and run." data-ar="مشاريع أسّستها وأديرها.">Businesses I founded and run.</h2><p data-en="Open any project for details, then scroll to browse the rest." data-ar="افتح أي مشروع لعرض تفاصيله، ثم مرّر لاستعراض بقية المشاريع.">Open any project for details, then scroll to browse the rest.</p></div>
         <div class="idx">02</div>
       </div>
       <div class="stack" id="stack"></div>
-      <div class="subhead"><h3 class="fd" data-en="Client work" data-ar="أعمال للعملاء والجهات">Client work</h3><p data-en="Projects delivered for clients and organizations." data-ar="مشاريع نفّذتها لعملاء وجهات متعددة.">Projects delivered for clients and organizations.</p></div>
+    </div>
+  </section>
+
+  <section id="clients" class="band">
+    <div class="wrap">
+      <div class="sh">
+        <div><div class="eyebrow" data-en="Client work" data-ar="أعمال للعملاء">Client work</div><h2 class="fd split" data-en="Built for clients and organizations." data-ar="مشاريع نفّذتها لجهات أخرى.">Built for clients and organizations.</h2><p data-en="Websites and platforms delivered for companies, clients, and teams." data-ar="مواقع ومنصّات سلّمتها لشركات وعملاء وفرق عمل.">Websites and platforms delivered for companies, clients, and teams.</p></div>
+        <div class="idx">03</div>
+      </div>
       <div class="filters" id="filters"></div>
       <div class="grid" id="grid"></div>
     </div>
@@ -496,7 +519,7 @@ header.hero{max-width:100% !important}
     <div class="wrap">
       <div class="sh">
         <div><div class="eyebrow" data-en="Experience" data-ar="الخبرة">Experience</div><h2 class="fd split" data-en="Professional experience." data-ar="الخبرة العملية.">Professional experience.</h2></div>
-        <div class="idx">03</div>
+        <div class="idx">04</div>
       </div>
       <div class="tl">
         <div class="ti now reveal">
@@ -531,7 +554,7 @@ header.hero{max-width:100% !important}
     <div class="wrap">
       <div class="sh">
         <div><div class="eyebrow" data-en="Toolbox" data-ar="الأدوات">Toolbox</div><h2 class="fd split" data-en="Tools and technologies." data-ar="الأدوات والتقنيات.">Tools and technologies.</h2></div>
-        <div class="idx">04</div>
+        <div class="idx">05</div>
       </div>
       <div class="skills">
         <div class="sk reveal"><h3 data-en="Frontend" data-ar="الواجهات">Frontend</h3><ul><li>React</li><li>Next.js</li><li>TypeScript</li><li>JavaScript</li><li>Tailwind</li><li>Astro</li><li>HTML / CSS</li><li>RTL and i18n</li></ul></div>
@@ -546,7 +569,7 @@ header.hero{max-width:100% !important}
     <div class="wrap">
       <div class="sh">
         <div><div class="eyebrow" data-en="Volunteering" data-ar="التطوّع">Volunteering</div><h2 class="fd split" data-en="1000+ volunteer hours." data-ar="أكثر من 1000 ساعة تطوّع.">1000+ volunteer hours.</h2><p data-en="Public relations, event management, and team leadership with seven organizations in Jeddah since 2019, work that sharpened my communication, coordination, and delivery under real deadlines." data-ar="علاقات عامة وإدارة فعاليات وقيادة فرق مع سبع جهات في جدة منذ 2019، صقلت مهارات التواصل والتنسيق والتسليم ضمن مواعيد فعلية.">Public relations, event management, and team leadership with seven organizations in Jeddah since 2019, work that sharpened my communication, coordination, and delivery under real deadlines.</p></div>
-        <div class="idx">05</div>
+        <div class="idx">06</div>
       </div>
       <div class="orgs">
         <div class="org reveal"><span class="lg"><img src="assets/org-haith.png" alt="Joy of Youth (Haith Al-Insan Awalan)" loading="lazy"></span><span data-en="Joy of Youth (Haith Al-Insan Awalan)" data-ar="مجموعة حيث الإنسان أولاً">Joy of Youth (Haith Al-Insan Awalan)</span></div>
@@ -562,7 +585,7 @@ header.hero{max-width:100% !important}
 
   <section id="contact" class="contact">
     <div class="wrap">
-      <div class="eyebrow reveal" style="color:var(--ice);font-family:var(--fd);letter-spacing:.24em;text-transform:uppercase;font-size:12px;margin-bottom:14px" data-en="Contact" data-ar="تواصل">Contact</div>
+      <div class="eyebrow" style="color:var(--ice);font-family:var(--fd);letter-spacing:.24em;text-transform:uppercase;font-size:12px;margin-bottom:14px" data-en="Contact" data-ar="تواصل">Contact</div>
       <h2 class="big fd split" data-en="Let's work together." data-ar="لنعمل معاً.">Let's work together.</h2>
       <a class="email magnet reveal" href="mailto:ab.alsyami@gmail.com">ab.alsyami@gmail.com</a>
       <div class="socials reveal">
@@ -1001,16 +1024,24 @@ function showWord(i) {
 }
 /* The hero stays pinned while the visitor scrolls through the four stages
    (name, think, build, ship); one screen of scroll per stage, then the page moves on. */
-function pinDistance() { return REDUCED ? 0 : innerHeight * (MOBILE ? 0.75 : 0.9) * (STAGES - 1); }
-function setupStages() {
-  stageST && stageST.kill(); stageST = null;
-  if (REDUCED) { showWord(0); return; }
-  stageST = ScrollTrigger.create({
-    trigger: '#hero', start: 'top top', end: () => '+=' + pinDistance(), pin: true, pinSpacing: true, anticipatePin: 1, invalidateOnRefresh: true,
-    onUpdate: self => showWord(Math.min(STAGES - 1, Math.floor(self.progress * STAGES * 0.999))),
-  });
-  ScrollTrigger.refresh();
+let pinPx = 0, pinW = 0;
+function pinDistance() {
+  if (REDUCED) return 0;
+  if (!pinPx || pinW !== innerWidth) { pinW = innerWidth; pinPx = Math.round(document.documentElement.clientHeight * (MOBILE ? 0.6 : 0.85) * (STAGES - 1)); }
+  return pinPx;
 }
+function setupStages() {
+  const track = $('#heroTrack');
+  if (track) track.style.setProperty('--pin', pinDistance() + 'px');
+  updateStage();
+}
+function updateStage() {
+  if (REDUCED) { showWord(0); return; }
+  const d = pinDistance(); if (!d) return;
+  const p = clamp(scrollY / d, 0, 1);
+  showWord(Math.min(STAGES - 1, Math.floor(p * STAGES * 0.999)));
+}
+addEventListener('resize', () => { if (pinW !== innerWidth) { pinPx = 0; setupStages(); ScrollTrigger.refresh(); } });
 /* ---------- language ---------- */
 function applyLang(first) {
   const t = T[LANG];
@@ -1127,9 +1158,12 @@ function openProject(id) {
 }
 function closeModal() { $('#modal').classList.remove('open'); unlockScroll(); }
 let mLock = false;
+const groupOf = p => PROJECTS.filter(q => q.feat === p.feat);
 function stepModal(d) {
-  if (mLock) return; mLock = true;
-  mIdx = (mIdx + d + PROJECTS.length) % PROJECTS.length; fillModal(d);
+  if (mLock) return;
+  const g = groupOf(PROJECTS[mIdx]), k = g.indexOf(PROJECTS[mIdx]) + d;
+  if (k < 0 || k >= g.length) { gsap.fromTo('.panel', { y: 0 }, { y: -10 * d, duration: .12, yoyo: true, repeat: 1, ease: 'power2.out' }); return; }
+  mLock = true; mIdx = PROJECTS.indexOf(g[k]); fillModal(d);
   setTimeout(() => mLock = false, 720);
 }
 function fillModal(dir = 0) {
@@ -1150,8 +1184,10 @@ function fillModalNow() {
   $('#mTags').innerHTML = p.tags.map(x => `<span>${x}</span>`).join('');
   $('#mYear').textContent = p.year; $('#mRole').textContent = LANG === 'ar' ? p.role_ar : p.role_en;
   const v = $('#mVisit'); if (p.url) { v.href = p.url; v.style.display = ''; v.querySelector('span').textContent = /instagram\.com/.test(p.url) ? visitLabel(p) : (LANG === 'ar' ? 'زُر الموقع الحيّ' : 'Visit live site'); } else v.style.display = 'none';
-  $('#mCount').textContent = `${String(mIdx + 1).padStart(2, '0')} / ${String(PROJECTS.length).padStart(2, '0')}`;
-  $('.m-rail i').style.height = ((mIdx + 1) / PROJECTS.length * 100) + '%';
+  const g = groupOf(p), k = g.indexOf(p) + 1;
+  $('#mCount').innerHTML = `<span class="m-group">${p.feat ? (LANG === 'ar' ? 'مشاريعي' : 'My ventures') : (LANG === 'ar' ? 'أعمال للعملاء' : 'Client work')}</span> ${String(k).padStart(2, '0')} / ${String(g.length).padStart(2, '0')}`;
+  $('.m-rail i').style.height = (k / g.length * 100) + '%';
+  $('#modal .up').disabled = k === 1; $('#modal .down').disabled = k === g.length;
   $('.m-body').scrollTop = 0; $('.panel').scrollTop = 0;
 }
 function initModal() {
@@ -1173,7 +1209,7 @@ function initModal() {
   let ty = 0;
   panel.addEventListener('touchstart', e => { ty = e.touches[0].clientY; }, { passive: true });
   panel.addEventListener('touchend', e => {
-    const dy = ty - e.changedTouches[0].clientY; if (Math.abs(dy) < 70) return;
+    const dy = ty - e.changedTouches[0].clientY; if (Math.abs(dy) < 120) return;
     const dir = dy > 0 ? 1 : -1;
     if (innerCanScroll(panel, dir) || innerCanScroll(e.target.closest('.m-media'), dir)) return;
     stepModal(dir);
@@ -1201,9 +1237,11 @@ function initScroll() {
   }
   $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => { const h = a.getAttribute('href') || ''; if (!h.startsWith('#')) return; e.preventDefault(); scrollToSel(h); }));
   const nav = $('#nav'), bar = $('#progress'), navLinks = $$('#navLinks a'), ind = $('#navLinks .ind');
-  const secs = ['about', 'work', 'exp', 'vol', 'contact'].map(id => $('#' + id));
+  const secs = ['about', 'work', 'clients', 'exp', 'vol', 'contact'].map(id => $('#' + id));
   const onScroll = () => {
     if (document.body.classList.contains('locked')) return;
+    updateStage();
+    clearTimeout(onScroll.rt); onScroll.rt = setTimeout(() => revealPass(), 120);
     nav.classList.toggle('scrolled', scrollY > 30);
     let cur = ''; secs.forEach(s => { if (s.getBoundingClientRect().top <= innerHeight * .45) cur = '#' + s.id; });
     if (scrollY + innerHeight >= document.documentElement.scrollHeight - 4) cur = '#contact';
@@ -1253,7 +1291,9 @@ function setupCamera() {
     }
   });
 }
+let revealPass = () => {};
 function setupReveals(reset) {
+  $$('[data-shown]').forEach(el => delete el.dataset.shown);
   io && io.disconnect();
   $$('.split').forEach(el => { splitEl(el); if (!REDUCED) gsap.set($$('i', el), { yPercent: 115, opacity: 0 }); });
   // Arabic letters join, so splitting them into separate spans breaks the word; wipe it in whole instead
@@ -1262,7 +1302,10 @@ function setupReveals(reset) {
   if (!REDUCED) gsap.set('.pr b, .ti, .org', { opacity: 0 });
   io = new IntersectionObserver(entries => entries.forEach(en => {
     if (!en.isIntersecting) return;
-    const el = en.target; io.unobserve(el);
+    revealEl(en.target);
+  }), { threshold: .2, rootMargin: '0px 0px -8% 0px' });
+  function revealEl(el) {
+    if (el.dataset.shown) return; el.dataset.shown = 1; io.unobserve(el);
     if (REDUCED) { el.classList.add('in'); if (el.classList.contains('stat')) countUp(el); return; }
     if (el.classList.contains('split')) landWords(el);
     else if (el.matches('.eyebrow, .sk h3')) { if (LANG === 'ar') gsap.to(el, { opacity: 1, x: 0, letterSpacing: '0em', duration: .8, ease: 'expo.out' }); else gsap.to($$('.ch', el), { opacity: 1, y: 0, duration: .35, stagger: .03, ease: 'power2.out' }); }
@@ -1274,7 +1317,8 @@ function setupReveals(reset) {
     else if (el.classList.contains('ti')) gsap.fromTo(el, { x: (LANG === 'ar' ? 1 : -1) * 60, opacity: 0 }, { x: 0, opacity: 1, duration: .8, ease: 'expo.out' });
     else if (el.classList.contains('org')) gsap.fromTo(el, { scale: .6, rotate: (Math.random() - .5) * 16, opacity: 0 }, { scale: 1, rotate: 0, opacity: 1, duration: .7, ease: 'back.out(2)' });
     el.classList.add('in');
-  }), { threshold: .2, rootMargin: '0px 0px -8% 0px' });
+  }
+  revealPass = () => $$('.split, .reveal, .stat, .eyebrow, .sk h3').forEach(el => { if (!el.dataset.shown && el.getBoundingClientRect().top < innerHeight) revealEl(el); });
   $$('.split, .reveal, .stat, .eyebrow, .sk h3').forEach(el => io.observe(el));
   setupCamera();
 }
