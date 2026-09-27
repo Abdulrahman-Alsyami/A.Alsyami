@@ -1054,8 +1054,15 @@ function initHeroSwipe() {
     const top = k >= STAGES ? heroEnd() : Math.round(k * step());
     window.scrollTo({ top, behavior: 'smooth' });
   };
-  addEventListener('touchstart', e => { y0 = inHero() ? e.touches[0].clientY : null; }, { passive: true });
-  addEventListener('touchmove', e => { if (y0 !== null && inHero()) e.preventDefault(); }, { passive: false });
+  // just below the hero, an upward swipe should step back into the last stage instead of flinging to the top
+  const nearEnd = () => !document.body.classList.contains('locked') && scrollY >= heroEnd() - 2 && scrollY < heroEnd() + 60;
+  let edge = false;
+  addEventListener('touchstart', e => { edge = nearEnd(); y0 = inHero() || edge ? e.touches[0].clientY : null; }, { passive: true });
+  addEventListener('touchmove', e => {
+    if (y0 === null) return;
+    if (edge && e.touches[0].clientY < y0) { y0 = null; return; } // moving on down the page: let it scroll natively
+    e.preventDefault();
+  }, { passive: false });
   addEventListener('touchend', e => {
     if (y0 === null) return;
     const dy = y0 - e.changedTouches[0].clientY; y0 = null;
