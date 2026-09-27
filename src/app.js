@@ -10,6 +10,8 @@ const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const lerp = (a, b, t) => a + (b - a) * t;
 const wait = ms => new Promise(r => setTimeout(r, ms));
 gsap.registerPlugin(ScrollTrigger);
+// iOS shows/hides its toolbars while scrolling; do not re-measure every pin on those height changes
+ScrollTrigger.config({ ignoreMobileResize: true });
 
 /* ---------- content ---------- */
 const PROJECTS = [
@@ -171,9 +173,11 @@ class Particles {
     this.renderer.setPixelRatio(Math.min(devicePixelRatio || 1, MOBILE ? 1.5 : 1.75));
     this.renderer.setClearColor(0x000000, 0);
     this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 1, 500);
+    this.canvas = canvas;
+    this.camera = new THREE.PerspectiveCamera(45, this.box().w / this.box().h, 1, 500);
     this.camera.position.z = 100;
-    this.N = MOBILE ? 7000 : 16000;
+    // particle density follows screen area so tablets are not sparse and small phones stay fast
+    this.N = innerWidth < 480 ? 7000 : innerWidth < 1100 ? 12000 : 16000;
     this.state = { shape: 0, scatter: 0, introScatter: 1, burst: 0, ox: 0, oy: 0 };
     this.mouse = new THREE.Vector2(9999, 9999);
     this.mouseT = new THREE.Vector2(9999, 9999);
@@ -182,9 +186,13 @@ class Particles {
     this.cur = 'A';
     this.text = 'ALSYAMI'; this.font = '800 200px Sora';
     this.build();
-    let rt;
-    addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => this.onResize(), 180); });
+    // iOS toolbars change the height on every scroll direction change; only re-sample when the width changes
+    // or the height changes a lot, otherwise just refit the buffer
+    let rt; this.lastBox = this.box();
+    const onBox = () => { clearTimeout(rt); rt = setTimeout(() => this.onResize(), 160); };
+    if (window.ResizeObserver) new ResizeObserver(onBox).observe(canvas); else addEventListener('resize', onBox);
   }
+  box() { const r = this.canvas.getBoundingClientRect(); return { w: Math.max(1, r.width || innerWidth), h: Math.max(1, r.height || innerHeight) }; }
   vis() { const h = 2 * Math.tan(THREE.MathUtils.degToRad(this.camera.fov / 2)) * this.camera.position.z; return { h, w: h * this.camera.aspect }; }
   build() {
     const N = this.N, g = new THREE.BufferGeometry();
@@ -209,7 +217,7 @@ class Particles {
     this.points = new THREE.Points(g, mat);
     this.points.frustumCulled = false;
     this.scene.add(this.points);
-    this.renderer.setSize(innerWidth, innerHeight, false);
+    const bx = this.box(); this.renderer.setSize(bx.w, bx.h, false);
   }
   fillShapes() {
     const { w, h } = this.vis(), N = this.N, R = Math.min(w, h) * 0.24, ga = Math.PI * (3 - Math.sqrt(5));
@@ -271,8 +279,10 @@ class Particles {
     else { this.u.uMix.value = 1; this.bufA.set(data); this.attrA.needsUpdate = true; gsap.to(this.u.uMix, { value: 0, duration: 1.3, ease: 'power3.inOut' }); this.cur = 'A'; }
   }
   onResize() {
-    this.camera.aspect = innerWidth / innerHeight; this.camera.updateProjectionMatrix();
-    this.renderer.setSize(innerWidth, innerHeight, false);
+    const bx = this.box(), prev = this.lastBox; this.lastBox = bx;
+    this.camera.aspect = bx.w / bx.h; this.camera.updateProjectionMatrix();
+    this.renderer.setSize(bx.w, bx.h, false);
+    if (Math.abs(bx.w - prev.w) < 2 && Math.abs(bx.h - prev.h) / prev.h < .2) return;
     this.fillShapes(); if (this.icon) this.setIcon(this.icon, true); else this.setText(this.text, this.font, true);
   }
   pointer(x, y) {
@@ -588,7 +598,9 @@ function initScroll() {
   const onScroll = () => {
     if (document.body.classList.contains('locked')) return;
     nav.classList.toggle('scrolled', scrollY > 30);
-    dock.classList.toggle('show', scrollY > pinDistance() + innerHeight * .6);
+    const dy = scrollY - (onScroll.y || 0); onScroll.y = scrollY;
+    if (Math.abs(dy) > 6) onScroll.up = dy < 0;
+    dock.classList.toggle('show', scrollY > pinDistance() + innerHeight * .6 && (onScroll.up || scrollY + innerHeight >= document.documentElement.scrollHeight - 40));
     let cur = ''; secs.forEach(s => { if (s.getBoundingClientRect().top <= innerHeight * .45) cur = '#' + s.id; });
     if (scrollY + innerHeight >= document.documentElement.scrollHeight - 4) cur = '#contact';
     dockLinks.forEach(a => a.classList.toggle('on', a.getAttribute('href') === cur));
@@ -627,7 +639,8 @@ function setupCamera() {
   camTriggers.forEach(t => t.kill()); camTriggers = [];
   if (REDUCED) return;
   $$('.sh').forEach(sh => {
-    const tw = gsap.fromTo(sh, { scale: 1.12, x: (LANG === 'ar' ? -1 : 1) * 60, opacity: .35 },
+    const narrow = innerWidth < 700;
+    const tw = gsap.fromTo(sh, { scale: narrow ? 1 : 1.12, x: narrow ? 0 : (LANG === 'ar' ? -1 : 1) * 60, opacity: .35 },
       { scale: 1, x: 0, opacity: 1, ease: 'none', scrollTrigger: { trigger: sh, start: 'top 95%', end: 'top 45%', scrub: .6 } });
     camTriggers.push(tw.scrollTrigger);
     const idx = sh.querySelector('.idx');
@@ -761,5 +774,6 @@ async function boot() {
   wordIdx = 0; showCaption(0); setupStages();
   gsap.fromTo('.hero-in > *, .hero .pill, .scroll-hint', { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 1.1, stagger: .09, ease: 'expo.out', delay: .55 });
   setTimeout(() => ScrollTrigger.refresh(), 1200);
+  addEventListener('load', () => ScrollTrigger.refresh());
 }
 boot();
