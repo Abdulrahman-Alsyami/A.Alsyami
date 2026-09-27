@@ -343,13 +343,6 @@ html[dir=rtl] .m-hint{font-family:var(--fa);letter-spacing:0;font-size:12px}
     .m-body{overflow:visible;padding-top:clamp(22px,3vw,40px)}
 }
 
-/* ============ mobile dock ============ */
-.dock{position:fixed;bottom:calc(14px + env(safe-area-inset-bottom, 0px));left:50%;top:auto;z-index:85;display:none;gap:2px;padding:6px;border-radius:999px;background:rgba(7,12,26,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line2);box-shadow:0 14px 40px rgba(0,0,0,.5);transform:translate(-50%,140%);opacity:0;transition:transform .45s var(--ease),opacity .3s}
-.dock.show{transform:translate(-50%,0);opacity:1}
-body.locked .dock{transform:translate(-50%,140%);opacity:0}
-.dock a{padding:9px 13px;border-radius:999px;font-size:12.5px;color:var(--soft);white-space:nowrap;transition:.2s}
-.dock a.on{background:rgba(59,130,246,.2);color:var(--ink)}
-@media(max-width:1000px){.dock{display:flex}footer{padding-bottom:86px}}
 @media(max-width:768px){.grain{animation:none;opacity:.04}}
 
 /* ============ motion prefs ============ */
@@ -385,7 +378,6 @@ body.locked .dock{transform:translate(-50%,140%);opacity:0}
   .hero-cap span{font-size:.95rem}
   .grain{display:none}
 }
-.dock{transition:transform .35s var(--ease),opacity .25s}
 
 /* ScrollTrigger pins with a measured px width; never let it exceed the viewport */
 .pin-spacer{max-width:100% !important}

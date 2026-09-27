@@ -593,17 +593,13 @@ function initScroll() {
     gsap.ticker.lagSmoothing(0);
   }
   $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => { const h = a.getAttribute('href') || ''; if (!h.startsWith('#')) return; e.preventDefault(); scrollToSel(h); }));
-  const nav = $('#nav'), bar = $('#progress'), dock = $('#dock'), dockLinks = $$('#dock a'), navLinks = $$('#navLinks a'), ind = $('#navLinks .ind');
+  const nav = $('#nav'), bar = $('#progress'), navLinks = $$('#navLinks a'), ind = $('#navLinks .ind');
   const secs = ['about', 'work', 'exp', 'vol', 'contact'].map(id => $('#' + id));
   const onScroll = () => {
     if (document.body.classList.contains('locked')) return;
     nav.classList.toggle('scrolled', scrollY > 30);
-    const dy = scrollY - (onScroll.y || 0); onScroll.y = scrollY;
-    if (Math.abs(dy) > 6) onScroll.up = dy < 0;
-    dock.classList.toggle('show', scrollY > pinDistance() + innerHeight * .6 && (onScroll.up || scrollY + innerHeight >= document.documentElement.scrollHeight - 40));
     let cur = ''; secs.forEach(s => { if (s.getBoundingClientRect().top <= innerHeight * .45) cur = '#' + s.id; });
     if (scrollY + innerHeight >= document.documentElement.scrollHeight - 4) cur = '#contact';
-    dockLinks.forEach(a => a.classList.toggle('on', a.getAttribute('href') === cur));
     let on = null; navLinks.forEach(a => { const hit = a.getAttribute('href') === cur; a.classList.toggle('on', hit); if (hit) on = a; });
     if (on) { ind.style.left = on.offsetLeft + 'px'; ind.style.width = on.offsetWidth + 'px'; ind.classList.add('show'); } else ind.classList.remove('show');
     const max = document.documentElement.scrollHeight - innerHeight;
